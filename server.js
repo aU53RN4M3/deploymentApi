@@ -131,6 +131,21 @@ app.get("/api/all-deployments", (req, res) => {
   const data = readData();
   res.json(data.deployments.filter((d) => d.date !== today));
 });
+app.post("/__admin/reset", (req, res) => {
+  writeData({ deployments: [] });
+  res.json({ success: true });
+});
+/* =========================================================
+   ADMIN – GET ALL DATA (READ ONLY)
+   ========================================================= */
+app.get("/__admin/all-data", (req, res) => {
+  try {
+    const data = readData();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to read data" });
+  }
+});
 
 /* =========================================================
    UPDATE STEP (return messageId + deploymentId)
@@ -219,3 +234,4 @@ const PORT = process.env.PORT || 4001;
 app.listen(PORT, () =>
   console.log(`✅ Backend running at http://localhost:${PORT}`)
 );
+
